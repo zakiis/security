@@ -1,12 +1,12 @@
-package com.matic.security.test;
+package com.zakiis.security.test;
 
 import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 
 import org.junit.Test;
 
-import com.matic.security.RSAUtil;
-import com.matic.security.codec.Base64Util;
+import com.zakiis.security.RSAUtil;
+import com.zakiis.security.codec.Base64Util;
 
 public class RSAUtilTest {
 	

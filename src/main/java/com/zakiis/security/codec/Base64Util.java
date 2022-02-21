@@ -1,4 +1,4 @@
-package com.matic.security.codec;
+package com.zakiis.security.codec;
 
 import java.util.Arrays;
 

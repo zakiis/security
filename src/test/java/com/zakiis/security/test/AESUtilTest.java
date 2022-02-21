@@ -1,11 +1,11 @@
-package com.matic.security.test;
+package com.zakiis.security.test;
 
 import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import com.matic.security.AESUtil;
-import com.matic.security.codec.HexUtil;
+import com.zakiis.security.AESUtil;
+import com.zakiis.security.codec.HexUtil;
 
 public class AESUtilTest {
 

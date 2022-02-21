@@ -1,10 +1,10 @@
-package com.matic.security.test;
+package com.zakiis.security.test;
 
 import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import com.matic.security.SHAUtil;
+import com.zakiis.security.SHAUtil;
 
 public class SHAUtilTest {
 

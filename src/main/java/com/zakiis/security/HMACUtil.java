@@ -1,4 +1,4 @@
-package com.matic.security;
+package com.zakiis.security;
 
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -11,9 +11,9 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import com.matic.error.MaticAlgorithmError;
-import com.matic.exception.IllegalArgumentException;
-import com.matic.security.codec.HexUtil;
+import com.zakiis.error.ZakiisAlgorithmError;
+import com.zakiis.exception.IllegalArgumentException;
+import com.zakiis.security.codec.HexUtil;
 
 /**
  * Hash-based Message Authentication Code 
@@ -33,7 +33,7 @@ public class HMACUtil {
 			byte[] result = mac.doFinal(sourceBytes);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (InvalidKeyException e) {
 			throw new IllegalArgumentException("Invalid key", e);
 		}
@@ -52,7 +52,7 @@ public class HMACUtil {
 			byte[] result = secretKey.getEncoded();
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
 	}
 	

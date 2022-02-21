@@ -1,10 +1,10 @@
-package com.matic.security;
+package com.zakiis.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 
-import com.matic.error.MaticAlgorithmError;
-import com.matic.security.codec.HexUtil;
+import com.zakiis.error.ZakiisAlgorithmError;
+import com.zakiis.security.codec.HexUtil;
 
 /**
  * Message Digest Algorithm
@@ -21,7 +21,7 @@ public class MD5Util {
 			byte[] result = md.digest();
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
 	}
 	

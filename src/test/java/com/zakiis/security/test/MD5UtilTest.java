@@ -1,10 +1,10 @@
-package com.matic.security.test;
+package com.zakiis.security.test;
 
 import java.io.UnsupportedEncodingException;
 
 import org.junit.Test;
 
-import com.matic.security.MD5Util;
+import com.zakiis.security.MD5Util;
 
 public class MD5UtilTest {
 

@@ -1,4 +1,4 @@
-package com.matic.security;
+package com.zakiis.security;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -6,8 +6,8 @@ import java.security.Security;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import com.matic.error.MaticAlgorithmError;
-import com.matic.security.codec.HexUtil;
+import com.zakiis.error.ZakiisAlgorithmError;
+import com.zakiis.security.codec.HexUtil;
 
 /**
  * Secured Hash Algorithm
@@ -26,7 +26,7 @@ public class SHAUtil {
 			byte[] result = md.digest();
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
 	}
 	

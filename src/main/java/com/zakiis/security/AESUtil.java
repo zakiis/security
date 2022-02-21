@@ -1,4 +1,4 @@
-package com.matic.security;
+package com.zakiis.security;
 
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
@@ -16,8 +16,8 @@ import javax.crypto.spec.SecretKeySpec;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import com.matic.error.MaticAlgorithmError;
-import com.matic.exception.IllegalArgumentException;
+import com.zakiis.error.ZakiisAlgorithmError;
+import com.zakiis.exception.IllegalArgumentException;
 
 /**
  * Advanced Encryption Standard
@@ -38,7 +38,7 @@ public class AESUtil {
 			kgen = KeyGenerator.getInstance(AES);
 			kgen.init(128, SecureRandom.getInstance("SHA1PRNG"));	
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
 		
 	}
@@ -55,7 +55,7 @@ public class AESUtil {
 			byte[] resultByteArr = cipher.doFinal(sourceBytes);
 			return resultByteArr;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
 			throw new IllegalArgumentException("No such padding", e);
 		} catch (InvalidKeyException e) {
@@ -65,7 +65,7 @@ public class AESUtil {
 		} catch (BadPaddingException e) {
 			throw new IllegalArgumentException("Bad padding", e);
 		} catch (InvalidAlgorithmParameterException e) {
-			throw new MaticAlgorithmError("No such algorithm parameter", e);
+			throw new ZakiisAlgorithmError("No such algorithm parameter", e);
 		}
 	}
 
@@ -81,7 +81,7 @@ public class AESUtil {
 			byte[] resultByteArr = cipher.doFinal(encryptedBytes);
 			return resultByteArr;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
 			throw new IllegalArgumentException("No such padding", e);
 		} catch (InvalidKeyException e) {
@@ -91,7 +91,7 @@ public class AESUtil {
 		} catch (BadPaddingException e) {
 			throw new IllegalArgumentException("Bad padding", e);
 		} catch (InvalidAlgorithmParameterException e) {
-			throw new MaticAlgorithmError("No such algorithm parameter", e);
+			throw new ZakiisAlgorithmError("No such algorithm parameter", e);
 		}
 	}
 

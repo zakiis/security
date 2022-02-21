@@ -1,4 +1,4 @@
-package com.matic.security;
+package com.zakiis.security;
 
 import java.io.ByteArrayInputStream;
 import java.security.InvalidKeyException;
@@ -23,9 +23,9 @@ import javax.crypto.NoSuchPaddingException;
 
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
-import com.matic.error.MaticAlgorithmError;
-import com.matic.exception.IllegalArgumentException;
-import com.matic.security.codec.Base64Util;
+import com.zakiis.error.ZakiisAlgorithmError;
+import com.zakiis.exception.IllegalArgumentException;
+import com.zakiis.security.codec.Base64Util;
 
 public class RSAUtil {
 
@@ -43,7 +43,7 @@ public class RSAUtil {
 			keyPairGen.initialize(2048);
 			keyFactory = KeyFactory.getInstance(RSA);
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
 	}
 	
@@ -56,7 +56,7 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
 			throw new IllegalArgumentException("No such padding", e);
 		} catch (InvalidKeyException e) {
@@ -66,7 +66,7 @@ public class RSAUtil {
 		} catch (BadPaddingException e) {
 			throw new IllegalArgumentException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new MaticAlgorithmError("Illegal key spec", e);
+			throw new ZakiisAlgorithmError("Illegal key spec", e);
 		}
 	}
 	
@@ -79,7 +79,7 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
 			throw new IllegalArgumentException("No such padding", e);
 		} catch (InvalidKeyException e) {
@@ -89,7 +89,7 @@ public class RSAUtil {
 		} catch (BadPaddingException e) {
 			throw new IllegalArgumentException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new MaticAlgorithmError("Illegal key spec", e);
+			throw new ZakiisAlgorithmError("Illegal key spec", e);
 		}
 	}
 	
@@ -102,7 +102,7 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
 			throw new IllegalArgumentException("No such padding", e);
 		} catch (InvalidKeyException e) {
@@ -112,7 +112,7 @@ public class RSAUtil {
 		} catch (BadPaddingException e) {
 			throw new IllegalArgumentException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new MaticAlgorithmError("Illegal key spec", e);
+			throw new ZakiisAlgorithmError("Illegal key spec", e);
 		}
 	}
 	
@@ -125,7 +125,7 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new MaticAlgorithmError("No such algorithm", e);
+			throw new ZakiisAlgorithmError("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
 			throw new IllegalArgumentException("No such padding", e);
 		} catch (InvalidKeyException e) {
@@ -135,7 +135,7 @@ public class RSAUtil {
 		} catch (BadPaddingException e) {
 			throw new IllegalArgumentException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new MaticAlgorithmError("Illegal key spec", e);
+			throw new ZakiisAlgorithmError("Illegal key spec", e);
 		}
 	}
 	
