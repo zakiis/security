@@ -43,15 +43,19 @@ public class AESUtil {
 		
 	}
 
-	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes) {
+	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes) { 
+		return encrypt(sourceBytes, keyBytes, IV_SEED.getBytes());
+	}
+	
+	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes, byte[] iv) {
 		if (keyBytes == null || keyBytes.length != 16) {
 			throw new IllegalArgumentException("Key length must be 16");
 		}
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
 			Cipher cipher = Cipher.getInstance(AES_MODE);
-			IvParameterSpec iv = new IvParameterSpec(IV_SEED.getBytes());
-			cipher.init(Cipher.ENCRYPT_MODE, keySpec, iv);
+			IvParameterSpec ivSpec = new IvParameterSpec(IV_SEED.getBytes());
+			cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
 			byte[] resultByteArr = cipher.doFinal(sourceBytes);
 			return resultByteArr;
 		} catch (NoSuchAlgorithmException e) {
@@ -70,14 +74,18 @@ public class AESUtil {
 	}
 
 	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes) {
+		return decrypt(encryptedBytes, keyBytes, IV_SEED.getBytes());
+	}
+	
+	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes, byte[] iv) {
 		if (keyBytes == null || keyBytes.length != 16) {
 			throw new IllegalArgumentException("Key length must be 16");
 		}
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
 			Cipher cipher = Cipher.getInstance(AES_MODE);
-			IvParameterSpec iv = new IvParameterSpec(IV_SEED.getBytes());
-			cipher.init(Cipher.DECRYPT_MODE, keySpec, iv);
+			IvParameterSpec ivSpec = new IvParameterSpec(IV_SEED.getBytes());
+			cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 			byte[] resultByteArr = cipher.doFinal(encryptedBytes);
 			return resultByteArr;
 		} catch (NoSuchAlgorithmException e) {
