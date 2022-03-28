@@ -55,12 +55,15 @@ public class CipherUtil {
 	}
 	
 	private static boolean cipher(Object obj, int cipherMode) {
-		if (obj == null || excludeClazz.contains(obj) 
-				|| obj.getClass().getCanonicalName().startsWith("java.")
-				|| obj.getClass().getCanonicalName().startsWith("javax.")) {
-			return false;
+		AtomicBoolean noCipherField = new AtomicBoolean(true);
+		if (obj == null) {
+			noCipherField.set(false);
+			return noCipherField.get();
 		}
-		AtomicBoolean hasCiphered = new AtomicBoolean(false);
+		if (needExcludeClazz(obj.getClass())) {
+			return noCipherField.get();
+		}
+		
 		ReflectionUtils.doWithFields(obj.getClass(), field -> {
 			if (Modifier.isStatic(field.getModifiers()) || Modifier.isTransient(field.getModifiers())) {
 				return;
@@ -68,43 +71,69 @@ public class CipherUtil {
 			ReflectionUtils.makeAccessible(field);
 			Object fieldValue = field.get(obj);
 			if (fieldValue == null) {
+				// can't determine whether it has cipher field or not if the value is null
+				if (!needExcludeClazz(field.getType())) {
+					noCipherField.set(false);
+				}
 				return;
 			}
 			if (field.isAnnotationPresent(Cipher.class)) {
 				if (javax.crypto.Cipher.ENCRYPT_MODE == cipherMode) {
-					String value = HexUtil.toHexString(AESUtil.encrypt(((String)fieldValue).getBytes(), aesSecretKey, iv));
+					String value = getEncryptedValue((String)fieldValue);
 					field.set(obj, value);
 				} else if (javax.crypto.Cipher.DECRYPT_MODE == cipherMode) {
-					String value = HexUtil.toHexString(AESUtil.decrypt(((String)fieldValue).getBytes(), aesSecretKey, iv));
+					String value = getDecryptedValue((String)fieldValue);
 					field.set(obj, value);
 				}
-				hasCiphered.set(true);
+				noCipherField.set(false);
 				return;
 			}
 			
 			if (Collection.class.isAssignableFrom(field.getClass())) {
 				Collection<?> collection = (Collection<?>) fieldValue;
 				collection.forEach(v -> {
-					boolean ciphered = cipher(obj, cipherMode);
-					if (ciphered) {
-						hasCiphered.set(true);
+					boolean childNoCipherField = cipher(obj, cipherMode);
+					if (!childNoCipherField) {
+						noCipherField.set(false);
 					}
 				});
 			} else if (Map.class.isAssignableFrom(field.getClass())) {
 				Collection<?> collection = ((Map<?,?>)fieldValue).values();
 				collection.forEach(v -> {
-					boolean ciphered = cipher(obj, cipherMode);
-					if (ciphered) {
-						hasCiphered.set(true);
+					boolean childNoCipherField = cipher(obj, cipherMode);
+					if (!childNoCipherField) {
+						noCipherField.set(false);
 					}
 				});
 			} else {
 				//find annotation recursively
-				cipher(fieldValue, cipherMode);
+				boolean childNoCipherField = cipher(fieldValue, cipherMode);
+				if (!childNoCipherField) {
+					noCipherField.set(false);
+				}
 			}
 		});
-		
-		return hasCiphered.get();
+		if (noCipherField.get()) {
+			excludeClazz.add(obj.getClass());
+		}
+		return noCipherField.get();
+	}
+	
+	private static boolean needExcludeClazz(Class<?> clazz) {
+		if (excludeClazz.contains(clazz) 
+				|| clazz.getCanonicalName().startsWith("java.")
+				|| clazz.getCanonicalName().startsWith("javax.")) {
+			return true;
+		}
+		return false;
+	}
+	
+	public static String getEncryptedValue(String str) {
+		return HexUtil.toHexString(AESUtil.encrypt(str.getBytes(), aesSecretKey, iv));
+	}
+	
+	public static String getDecryptedValue(String str) {
+		return new String(AESUtil.decrypt(HexUtil.toByteArray(str), aesSecretKey, iv));
 	}
 	
 }

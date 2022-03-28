@@ -78,8 +78,8 @@ public class AESUtil {
 	}
 	
 	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes, byte[] iv) {
-		if (keyBytes == null || keyBytes.length != 16) {
-			throw new IllegalArgumentException("Key length must be 16");
+		if (keyBytes == null || (keyBytes.length != 16 && keyBytes.length != 24 && keyBytes.length != 32)) {
+			throw new IllegalArgumentException("Key length must be in 16, 24, 32");
 		}
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
