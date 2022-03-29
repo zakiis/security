@@ -2,8 +2,8 @@ package com.zakiis.security.test;
 
 import java.math.BigDecimal;
 
-import org.junit.BeforeClass;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 import com.zakiis.algorithm.JsonUtil;
 import com.zakiis.security.AESUtil;
@@ -18,7 +18,7 @@ public class CipherUtilTest {
 	static byte[] iv;
 	
 	
-	@BeforeClass
+	@BeforeAll
 	public static void setup() {
 		secretKey = AESUtil.genKey();
 		iv = "0123456789123456".getBytes();

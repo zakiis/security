@@ -3,7 +3,7 @@ package com.zakiis.security.test;
 import java.io.UnsupportedEncodingException;
 import java.security.KeyPair;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import com.zakiis.security.RSAUtil;
 import com.zakiis.security.codec.Base64Util;

@@ -7,7 +7,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
 import com.zakiis.security.annotation.Cipher;
@@ -47,11 +49,33 @@ public class CipherUtil {
 	}
 	
 	public static void encrypt(Object obj) {
-		cipher(obj, javax.crypto.Cipher.ENCRYPT_MODE);
+		if (obj == null) {
+			return;
+		}
+		if (obj instanceof Collection) {
+			Collection<?> collection = (Collection<?>) obj;
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.ENCRYPT_MODE));
+		} else if (obj instanceof Map) {
+			Collection<?> collection = ((Map<?, ?>) obj).values();
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.ENCRYPT_MODE));
+		} else {
+			cipher(obj, javax.crypto.Cipher.ENCRYPT_MODE);
+		}
 	}
 
 	public static void decrypt(Object obj) {
-		cipher(obj, javax.crypto.Cipher.DECRYPT_MODE);
+		if (obj == null) {
+			return;
+		}
+		if (obj instanceof Collection) {
+			Collection<?> collection = (Collection<?>) obj;
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.DECRYPT_MODE));
+		} else if (obj instanceof Map) {
+			Collection<?> collection = ((Map<?, ?>) obj).values();
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.DECRYPT_MODE));
+		} else {
+			cipher(obj, javax.crypto.Cipher.DECRYPT_MODE);
+		}
 	}
 	
 	private static boolean cipher(Object obj, int cipherMode) {
@@ -106,6 +130,9 @@ public class CipherUtil {
 					}
 				});
 			} else {
+				if (needExcludeClazz(obj.getClass())) {
+					return;
+				}
 				//find annotation recursively
 				boolean childNoCipherField = cipher(fieldValue, cipherMode);
 				if (!childNoCipherField) {
@@ -133,7 +160,19 @@ public class CipherUtil {
 	}
 	
 	public static String getDecryptedValue(String str) {
-		return new String(AESUtil.decrypt(HexUtil.toByteArray(str), aesSecretKey, iv));
+		if (isEncryptedValue(str)) {
+			return new String(AESUtil.decrypt(HexUtil.toByteArray(str), aesSecretKey, iv));
+		} else {
+			return str;
+		}
 	}
 	
+	final static Pattern hexPattern = Pattern.compile("^[a-fA-F0-9]+$");
+	private static boolean isEncryptedValue(String str) {
+		if (StringUtils.isEmpty(str) || str.length() % 16 != 0
+				|| !hexPattern.matcher(str).find()) {
+			return false;
+		}
+		return true;
+	}
 }
