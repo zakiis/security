@@ -3,15 +3,16 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
   <modelVersion>4.0.0</modelVersion>
   <parent>
-    <groupId>com.github.zakiis</groupId>
+    <groupId>io.github.zakiis</groupId>
     <artifactId>zakiis-parent</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.1</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
   
   <artifactId>zakiis-security</artifactId>
   <name>zakiis-security</name>
-  <url>http://maven.apache.org</url>
+  <url>https://zakiis.github.io</url>
+  <description>securty utils or interceptors</description>
   
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -19,11 +20,11 @@
   
   <dependencies>
     <dependency>
-      <groupId>com.github.zakiis</groupId>
+      <groupId>io.github.zakiis</groupId>
 	  <artifactId>zakiis-exception</artifactId>
 	</dependency>
     <dependency>
-      <groupId>com.github.zakiis</groupId>
+      <groupId>io.github.zakiis</groupId>
 	  <artifactId>zakiis-common</artifactId>
 	</dependency>
 		
