@@ -16,6 +16,7 @@ public class DesensitizationUtilTest {
 		Set<String> replaceFields = new HashSet<String>();
 		replaceFields.add("userName");
 		replaceFields.add("mobile");
+		replaceFields.add("email");
 		Set<String> eraseFields = new HashSet<String>();
 		eraseFields.add("age");
 		eraseFields.add("password");
@@ -31,7 +32,7 @@ public class DesensitizationUtilTest {
 		content = "add user start, param: {\"userName\":\"zhangsan123\", \"password\":\"123456\", \"mobile\":\"13112341234\", \"sex\":\"male\", \"country\":\"China\", \"age\":65}";
 		System.out.println(DesensitizationUtil.convert(content));
 		
-		content = "add user start, params: {userName=zhangsan123, age = , password=123456, mobile = 13112341234, sex=male, country=China}";
+		content = "add user start, params: {userName=zhangsan123, email=test-123-hello@qq.com, age = , password=123456, mobile = 13112341234, sex=male, country=China}";
 		System.out.println(DesensitizationUtil.convert(content));
 	}
 }

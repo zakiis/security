@@ -10,7 +10,7 @@ public class DesensitizationUtil {
 	private static Set<String> eraseFields;
 	private static Set<String> dropFields;
 	
-	private static Pattern fieldPattern = Pattern.compile("[ '\"]?([a-zA-Z_$]\\w*)['\"]?\\s*[:,，：=]+\\s*(['\"]?\\w+['\" ]?)");
+	private static Pattern fieldPattern = Pattern.compile("[ '\"]?([a-zA-Z_$][\\w_$]*)['\"]?\\s*[:,，：=]+\\s*(['\"]?[\\w@._\\-$]+['\" ]?)");
 	
 	public static void init(Set<String> replaceFields, Set<String> eraseFields, Set<String> dropFields) {
 		DesensitizationUtil.replaceFields = replaceFields;
