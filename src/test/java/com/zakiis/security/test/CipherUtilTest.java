@@ -5,7 +5,7 @@ import java.math.BigDecimal;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import com.zakiis.algorithm.JsonUtil;
+import com.zakiis.common.JsonUtil;
 import com.zakiis.security.AESUtil;
 import com.zakiis.security.CipherUtil;
 import com.zakiis.security.test.model.Address;
