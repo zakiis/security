@@ -77,6 +77,15 @@ public class HMACUtil {
 			return algorithm;
 		}
 		
+		public static HMACType getByAlogorithm(String algorithm) {
+			for (HMACType hmacType : values()) {
+				if (hmacType.getAlgorithm().equals(algorithm)) {
+					return hmacType;
+				}
+			}
+			return null;
+		}
+		
 		private HMACType(String algorithm) {
 			this.algorithm = algorithm;
 		}

@@ -2,6 +2,8 @@ package com.zakiis.security.codec;
 
 import java.util.Arrays;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class Base64Util {
 	
 	/**
@@ -64,7 +66,12 @@ public class Base64Util {
 	}
     
     public static String encodeToBase64URL(byte[] src) {
-		return encode(src, toBase64URL);
+    	String base64 = encode(src, toBase64URL);
+    	int i = base64.length();
+    	while (base64.charAt(i - 1) == '=') {
+    		i--;
+    	}
+    	return base64.substring(0, i);
 	}
     
     private static String encode(byte[] src, char[] base64) {
@@ -103,6 +110,10 @@ public class Base64Util {
 	}
     
     public static byte[] decodeFromBase64URL(String src) {
+    	int repeat = 4 - src.length() % 4;
+    	if (repeat != 0) {
+    		src += StringUtils.repeat('=', repeat);
+    	}
 		return decode(src.getBytes(), fromBase64URL);
 	}
     
