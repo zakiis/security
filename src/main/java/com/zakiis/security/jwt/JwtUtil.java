@@ -8,7 +8,7 @@ import com.zakiis.security.jwt.interfaces.DecodedJwt;
  * https://datatracker.ietf.org/doc/html/rfc7519
  * @author 10901
  */
-public class JwtUtil {
+public class JWTUtil {
 
 	public static JwtCreator.Builder create() {
 		return new JwtCreator.Builder();

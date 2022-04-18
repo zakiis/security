@@ -12,8 +12,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.zakiis.error.ZakiisAlgorithmError;
-import com.zakiis.exception.IllegalArgumentException;
 import com.zakiis.security.codec.HexUtil;
+import com.zakiis.security.exception.DigestException;
 
 /**
  * Hash-based Message Authentication Code 
@@ -33,9 +33,9 @@ public class HMACUtil {
 			byte[] result = mac.doFinal(sourceBytes);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new DigestException("No such algorithm", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new DigestException("Invalid key", e);
 		}
 	}
 	

@@ -24,8 +24,9 @@ import javax.crypto.NoSuchPaddingException;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.zakiis.error.ZakiisAlgorithmError;
-import com.zakiis.exception.IllegalArgumentException;
 import com.zakiis.security.codec.Base64Util;
+import com.zakiis.security.exception.RSADecryptException;
+import com.zakiis.security.exception.RSAEncryptException;
 
 public class RSAUtil {
 
@@ -56,17 +57,17 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new RSAEncryptException("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			throw new IllegalArgumentException("No such padding", e);
+			throw new RSAEncryptException("No such padding", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new RSAEncryptException("Invalid key", e);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalArgumentException("Illegal block size", e);
+			throw new RSAEncryptException("Illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalArgumentException("Bad padding", e);
+			throw new RSAEncryptException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new ZakiisAlgorithmError("Illegal key spec", e);
+			throw new RSAEncryptException("Illegal key spec", e);
 		}
 	}
 	
@@ -79,17 +80,17 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new RSAEncryptException("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			throw new IllegalArgumentException("No such padding", e);
+			throw new RSAEncryptException("No such padding", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new RSAEncryptException("Invalid key", e);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalArgumentException("Illegal block size", e);
+			throw new RSAEncryptException("Illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalArgumentException("Bad padding", e);
+			throw new RSAEncryptException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new ZakiisAlgorithmError("Illegal key spec", e);
+			throw new RSAEncryptException("Illegal key spec", e);
 		}
 	}
 	
@@ -102,17 +103,17 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new RSADecryptException("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			throw new IllegalArgumentException("No such padding", e);
+			throw new RSADecryptException("No such padding", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new RSADecryptException("Invalid key", e);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalArgumentException("Illegal block size", e);
+			throw new RSADecryptException("Illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalArgumentException("Bad padding", e);
+			throw new RSADecryptException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new ZakiisAlgorithmError("Illegal key spec", e);
+			throw new RSADecryptException("Illegal key spec", e);
 		}
 	}
 	
@@ -125,17 +126,17 @@ public class RSAUtil {
 			byte[] result = cipher.doFinal(source);
 			return result;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new RSADecryptException("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			throw new IllegalArgumentException("No such padding", e);
+			throw new RSADecryptException("No such padding", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new RSADecryptException("Invalid key", e);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalArgumentException("Illegal block size", e);
+			throw new RSADecryptException("Illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalArgumentException("Bad padding", e);
+			throw new RSADecryptException("Bad padding", e);
 		} catch (InvalidKeySpecException e) {
-			throw new ZakiisAlgorithmError("Illegal key spec", e);
+			throw new RSADecryptException("Illegal key spec", e);
 		}
 	}
 	

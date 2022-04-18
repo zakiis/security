@@ -17,7 +17,8 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.zakiis.error.ZakiisAlgorithmError;
-import com.zakiis.exception.IllegalArgumentException;
+import com.zakiis.security.exception.AESDecryptException;
+import com.zakiis.security.exception.AESEncryptException;
 
 /**
  * Advanced Encryption Standard
@@ -59,17 +60,17 @@ public class AESUtil {
 			byte[] resultByteArr = cipher.doFinal(sourceBytes);
 			return resultByteArr;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new AESEncryptException("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			throw new IllegalArgumentException("No such padding", e);
+			throw new AESEncryptException("No such padding", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new AESEncryptException("Invalid key", e);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalArgumentException("Illegal block size", e);
+			throw new AESEncryptException("Illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalArgumentException("Bad padding", e);
+			throw new AESEncryptException("Bad padding", e);
 		} catch (InvalidAlgorithmParameterException e) {
-			throw new ZakiisAlgorithmError("No such algorithm parameter", e);
+			throw new AESEncryptException("No such algorithm parameter", e);
 		}
 	}
 
@@ -89,17 +90,17 @@ public class AESUtil {
 			byte[] resultByteArr = cipher.doFinal(encryptedBytes);
 			return resultByteArr;
 		} catch (NoSuchAlgorithmException e) {
-			throw new ZakiisAlgorithmError("No such algorithm", e);
+			throw new AESDecryptException("No such algorithm", e);
 		} catch (NoSuchPaddingException e) {
-			throw new IllegalArgumentException("No such padding", e);
+			throw new AESDecryptException("No such padding", e);
 		} catch (InvalidKeyException e) {
-			throw new IllegalArgumentException("Invalid key", e);
+			throw new AESDecryptException("Invalid key", e);
 		} catch (IllegalBlockSizeException e) {
-			throw new IllegalArgumentException("Illegal block size", e);
+			throw new AESDecryptException("Illegal block size", e);
 		} catch (BadPaddingException e) {
-			throw new IllegalArgumentException("Bad padding", e);
+			throw new AESDecryptException("Bad padding", e);
 		} catch (InvalidAlgorithmParameterException e) {
-			throw new ZakiisAlgorithmError("No such algorithm parameter", e);
+			throw new AESDecryptException("No such algorithm parameter", e);
 		}
 	}
 
