@@ -14,11 +14,11 @@ import com.zakiis.security.jwt.deserializer.PayloadDeserializer;
 import com.zakiis.security.jwt.interfaces.Header;
 import com.zakiis.security.jwt.interfaces.Payload;
 
-public class JwtParser {
+public class JWTParser {
 	
 	static ObjectMapper mapper = new ObjectMapper();
-	static Logger logger = LoggerFactory.getLogger(JwtParser.class);
-	static Logger log = LoggerFactory.getLogger(JwtParser.class);
+	static Logger logger = LoggerFactory.getLogger(JWTParser.class);
+	static Logger log = LoggerFactory.getLogger(JWTParser.class);
 	
 	static {
 		mapper

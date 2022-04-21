@@ -6,11 +6,11 @@ import com.zakiis.security.jwt.algorithm.Algorithm;
 import com.zakiis.security.jwt.exception.JWTVerificationException;
 import com.zakiis.security.jwt.interfaces.DecodedJwt;
 
-public class JwtVerifier {
+public class JWTVerifier {
 	
 	Algorithm algorithm;
 	
-	public JwtVerifier(Algorithm algorithm) {
+	public JWTVerifier(Algorithm algorithm) {
 		this.algorithm = algorithm;
 	}
 

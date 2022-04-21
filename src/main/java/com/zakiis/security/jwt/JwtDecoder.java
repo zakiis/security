@@ -9,18 +9,18 @@ import com.zakiis.security.jwt.interfaces.DecodedJwt;
 import com.zakiis.security.jwt.interfaces.Header;
 import com.zakiis.security.jwt.interfaces.Payload;
 
-public class JwtDecoder implements DecodedJwt {
+public class JWTDecoder implements DecodedJwt {
 
 	private final String[] parts;
 	private final Header header;
 	private final Payload payload;
 	
-	JwtDecoder(String token) {
+	JWTDecoder(String token) {
 		this.parts = token.split("\\.");
 		String headerJson = new String(Base64Util.decodeFromBase64URL(parts[0]), StandardCharsets.UTF_8);
 		String payloadJson = new String(Base64Util.decodeFromBase64URL(parts[1]), StandardCharsets.UTF_8);
-		header = JwtParser.parseHeader(headerJson);
-		payload = JwtParser.parsePayload(payloadJson);
+		header = JWTParser.parseHeader(headerJson);
+		payload = JWTParser.parsePayload(payloadJson);
 	}
 
 	@Override

@@ -28,6 +28,7 @@ public class AESUtil {
 	
 	static final String AES = "AES";
 	static final String AES_MODE = "AES/CBC/PKCS7Padding";
+//	static final String AES_MODE = "AES/CFB/NoPadding";
 	/** 根据AES的分组规则，IV必须是128bit */
 	static final String IV_SEED = "0000000000000000";
 	
@@ -37,7 +38,8 @@ public class AESUtil {
 		Security.addProvider(new BouncyCastleProvider());
 		try {
 			kgen = KeyGenerator.getInstance(AES);
-			kgen.init(128, SecureRandom.getInstance("SHA1PRNG"));	
+			// AES256
+			kgen.init(256, SecureRandom.getInstance("SHA1PRNG"));	
 		} catch (NoSuchAlgorithmException e) {
 			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
@@ -49,13 +51,13 @@ public class AESUtil {
 	}
 	
 	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes, byte[] iv) {
-		if (keyBytes == null || keyBytes.length != 16) {
-			throw new IllegalArgumentException("Key length must be 16");
+		if (keyBytes == null || keyBytes.length % 8 != 0) {
+			throw new IllegalArgumentException("Key length must be one of 16, 24, 32");
 		}
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
 			Cipher cipher = Cipher.getInstance(AES_MODE);
-			IvParameterSpec ivSpec = new IvParameterSpec(IV_SEED.getBytes());
+			IvParameterSpec ivSpec = new IvParameterSpec(iv);
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
 			byte[] resultByteArr = cipher.doFinal(sourceBytes);
 			return resultByteArr;
@@ -85,7 +87,7 @@ public class AESUtil {
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
 			Cipher cipher = Cipher.getInstance(AES_MODE);
-			IvParameterSpec ivSpec = new IvParameterSpec(IV_SEED.getBytes());
+			IvParameterSpec ivSpec = new IvParameterSpec(iv);
 			cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 			byte[] resultByteArr = cipher.doFinal(encryptedBytes);
 			return resultByteArr;

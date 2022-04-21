@@ -10,15 +10,15 @@ import com.zakiis.security.jwt.interfaces.DecodedJwt;
  */
 public class JWTUtil {
 
-	public static JwtCreator.Builder create() {
-		return new JwtCreator.Builder();
+	public static JWTCreator.Builder create() {
+		return new JWTCreator.Builder();
 	}
 	
 	public static DecodedJwt decode(String token) {
-		return new JwtDecoder(token);
+		return new JWTDecoder(token);
 	}
 
-	public static JwtVerifier require(Algorithm algorithm) {
-		return new JwtVerifier(algorithm);
+	public static JWTVerifier require(Algorithm algorithm) {
+		return new JWTVerifier(algorithm);
 	}
 }

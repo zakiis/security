@@ -10,13 +10,13 @@ import com.zakiis.security.codec.Base64Util;
 import com.zakiis.security.jwt.algorithm.Algorithm;
 import com.zakiis.security.jwt.interfaces.PublicClaims;
 
-public class JwtCreator {
+public class JWTCreator {
 
 	private final Algorithm algorithm;
 	private final String headerJson;
 	private final String payloadJson;
 
-	private JwtCreator(Algorithm algorithm, Map<String, Object> headerClaims, Map<String, Object> payloadClaims) {
+	private JWTCreator(Algorithm algorithm, Map<String, Object> headerClaims, Map<String, Object> payloadClaims) {
 		this.algorithm = algorithm;
 		headerJson = JsonUtil.toJson(headerClaims);
 		payloadJson = JsonUtil.toJson(payloadClaims);
@@ -111,7 +111,7 @@ public class JwtCreator {
 			if (signingKeyId != null) {
 				withKeyId(signingKeyId);
 			}
-			return new JwtCreator(algorithm, headerClaims, payloadClaims).sign();
+			return new JWTCreator(algorithm, headerClaims, payloadClaims).sign();
 		}
 	}
 
