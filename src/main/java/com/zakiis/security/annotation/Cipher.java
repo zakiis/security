@@ -11,4 +11,6 @@ import java.lang.annotation.Target;
 @Inherited
 public @interface Cipher {
 
+	/** full length of that field if the length is fixed.*/
+	int length() default 0;
 }

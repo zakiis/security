@@ -17,6 +17,7 @@ import javax.crypto.spec.SecretKeySpec;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
 
 import com.zakiis.error.ZakiisAlgorithmError;
+import com.zakiis.security.constants.AESMode;
 import com.zakiis.security.exception.AESDecryptException;
 import com.zakiis.security.exception.AESEncryptException;
 
@@ -27,10 +28,10 @@ import com.zakiis.security.exception.AESEncryptException;
 public class AESUtil {
 	
 	static final String AES = "AES";
-	static final String AES_MODE = "AES/CBC/PKCS7Padding";
-//	static final String AES_MODE = "AES/CFB/NoPadding";
+	static final int AES_KEY_LENGTH = 256;
+	static final String DEFAULT_AES_MODE = "AES/CBC/PKCS7Padding";
 	/** 根据AES的分组规则，IV必须是128bit */
-	static final String IV_SEED = "0000000000000000";
+	static final String DEFAULT_IV_SEED = "0000000000000000";
 	
 	static KeyGenerator kgen;
 	
@@ -39,7 +40,7 @@ public class AESUtil {
 		try {
 			kgen = KeyGenerator.getInstance(AES);
 			// AES256
-			kgen.init(256, SecureRandom.getInstance("SHA1PRNG"));	
+			kgen.init(AES_KEY_LENGTH, SecureRandom.getInstance("SHA1PRNG"));	
 		} catch (NoSuchAlgorithmException e) {
 			throw new ZakiisAlgorithmError("No such algorithm", e);
 		}
@@ -47,16 +48,28 @@ public class AESUtil {
 	}
 
 	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes) { 
-		return encrypt(sourceBytes, keyBytes, IV_SEED.getBytes());
+		return encrypt(sourceBytes, keyBytes, DEFAULT_IV_SEED.getBytes());
 	}
 	
-	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes, byte[] iv) {
+	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes, byte[] iv) { 
+		return encrypt(sourceBytes, keyBytes, iv, DEFAULT_AES_MODE);
+	}
+	
+	/**
+	 * encrypt content using AES algorithm
+	 * @param sourceBytes content need encrypt
+	 * @param keyBytes AES secret key
+	 * @param iv initial vector
+	 * @param aesMode {@link AESMode}
+	 * @return
+	 */
+	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes, byte[] iv, String aesMode) {
 		if (keyBytes == null || keyBytes.length % 8 != 0) {
 			throw new IllegalArgumentException("Key length must be one of 16, 24, 32");
 		}
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
-			Cipher cipher = Cipher.getInstance(AES_MODE);
+			Cipher cipher = Cipher.getInstance(aesMode);
 			IvParameterSpec ivSpec = new IvParameterSpec(iv);
 			cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivSpec);
 			byte[] resultByteArr = cipher.doFinal(sourceBytes);
@@ -77,16 +90,28 @@ public class AESUtil {
 	}
 
 	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes) {
-		return decrypt(encryptedBytes, keyBytes, IV_SEED.getBytes());
+		return decrypt(encryptedBytes, keyBytes, DEFAULT_IV_SEED.getBytes());
 	}
 	
 	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes, byte[] iv) {
+		return decrypt(encryptedBytes, keyBytes, iv, DEFAULT_AES_MODE);
+	}
+	
+	/**
+	 * decrypt content using AES algorithm
+	 * @param sourceBytes content need decrypt
+	 * @param keyBytes AES secret key
+	 * @param iv initial vector
+	 * @param aesMode {@link AESMode}
+	 * @return
+	 */
+	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes, byte[] iv, String aesMode) {
 		if (keyBytes == null || (keyBytes.length != 16 && keyBytes.length != 24 && keyBytes.length != 32)) {
 			throw new IllegalArgumentException("Key length must be in 16, 24, 32");
 		}
 		SecretKeySpec keySpec = new SecretKeySpec(keyBytes, AES);
 		try {
-			Cipher cipher = Cipher.getInstance(AES_MODE);
+			Cipher cipher = Cipher.getInstance(aesMode);
 			IvParameterSpec ivSpec = new IvParameterSpec(iv);
 			cipher.init(Cipher.DECRYPT_MODE, keySpec, ivSpec);
 			byte[] resultByteArr = cipher.doFinal(encryptedBytes);

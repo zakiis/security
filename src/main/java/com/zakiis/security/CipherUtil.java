@@ -2,8 +2,10 @@ package com.zakiis.security;
 
 import java.lang.reflect.Modifier;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -12,13 +14,16 @@ import java.util.regex.Pattern;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.util.ReflectionUtils;
 
+import com.zakiis.common.SecretFieldTokenizerUtil;
 import com.zakiis.security.annotation.Cipher;
 import com.zakiis.security.codec.HexUtil;
+import com.zakiis.security.constants.AESMode;
 
 public class CipherUtil {
 
 	private static byte[] aesSecretKey;
 	private static byte[] iv;
+	private static boolean enableFuzzyQuery;
 	
 	private static Set<Class<?>>excludeClazz = new HashSet<Class<?>>();
 	
@@ -43,23 +48,24 @@ public class CipherUtil {
 	}
 	
 	
-	public static void init(byte[] aesSescretKey, byte[] iv) {
+	public static void init(byte[] aesSescretKey, byte[] iv, boolean enableFuzzyQuery) {
 		CipherUtil.aesSecretKey = aesSescretKey;
 		CipherUtil.iv = iv;
+		CipherUtil.enableFuzzyQuery = enableFuzzyQuery;
 	}
 	
-	public static void encrypt(Object obj) {
+	public static void encrypt(Object obj, boolean criteriaEncrypt) {
 		if (obj == null) {
 			return;
 		}
 		if (obj instanceof Collection) {
 			Collection<?> collection = (Collection<?>) obj;
-			collection.forEach(v -> cipher(v, javax.crypto.Cipher.ENCRYPT_MODE));
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.ENCRYPT_MODE, criteriaEncrypt));
 		} else if (obj instanceof Map) {
 			Collection<?> collection = ((Map<?, ?>) obj).values();
-			collection.forEach(v -> cipher(v, javax.crypto.Cipher.ENCRYPT_MODE));
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.ENCRYPT_MODE, criteriaEncrypt));
 		} else {
-			cipher(obj, javax.crypto.Cipher.ENCRYPT_MODE);
+			cipher(obj, javax.crypto.Cipher.ENCRYPT_MODE, criteriaEncrypt);
 		}
 	}
 
@@ -69,16 +75,16 @@ public class CipherUtil {
 		}
 		if (obj instanceof Collection) {
 			Collection<?> collection = (Collection<?>) obj;
-			collection.forEach(v -> cipher(v, javax.crypto.Cipher.DECRYPT_MODE));
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.DECRYPT_MODE, false));
 		} else if (obj instanceof Map) {
 			Collection<?> collection = ((Map<?, ?>) obj).values();
-			collection.forEach(v -> cipher(v, javax.crypto.Cipher.DECRYPT_MODE));
+			collection.forEach(v -> cipher(v, javax.crypto.Cipher.DECRYPT_MODE, false));
 		} else {
-			cipher(obj, javax.crypto.Cipher.DECRYPT_MODE);
+			cipher(obj, javax.crypto.Cipher.DECRYPT_MODE, false);
 		}
 	}
 	
-	private static boolean cipher(Object obj, int cipherMode) {
+	private static boolean cipher(Object obj, int cipherMode, boolean criteriaEncrypt) {
 		AtomicBoolean noCipherField = new AtomicBoolean(true);
 		if (obj == null) {
 			noCipherField.set(false);
@@ -103,7 +109,8 @@ public class CipherUtil {
 			}
 			if (field.isAnnotationPresent(Cipher.class)) {
 				if (javax.crypto.Cipher.ENCRYPT_MODE == cipherMode) {
-					String value = getEncryptedValue((String)fieldValue);
+					Cipher cipher = field.getAnnotation(Cipher.class);
+					String value = getEncryptedValue((String)fieldValue, criteriaEncrypt, cipher.length());
 					field.set(obj, value);
 				} else if (javax.crypto.Cipher.DECRYPT_MODE == cipherMode) {
 					String value = getDecryptedValue((String)fieldValue);
@@ -116,7 +123,7 @@ public class CipherUtil {
 			if (Collection.class.isAssignableFrom(field.getClass())) {
 				Collection<?> collection = (Collection<?>) fieldValue;
 				collection.forEach(v -> {
-					boolean childNoCipherField = cipher(obj, cipherMode);
+					boolean childNoCipherField = cipher(obj, cipherMode, criteriaEncrypt);
 					if (!childNoCipherField) {
 						noCipherField.set(false);
 					}
@@ -124,7 +131,7 @@ public class CipherUtil {
 			} else if (Map.class.isAssignableFrom(field.getClass())) {
 				Collection<?> collection = ((Map<?,?>)fieldValue).values();
 				collection.forEach(v -> {
-					boolean childNoCipherField = cipher(obj, cipherMode);
+					boolean childNoCipherField = cipher(obj, cipherMode, criteriaEncrypt);
 					if (!childNoCipherField) {
 						noCipherField.set(false);
 					}
@@ -134,7 +141,7 @@ public class CipherUtil {
 					return;
 				}
 				//find annotation recursively
-				boolean childNoCipherField = cipher(fieldValue, cipherMode);
+				boolean childNoCipherField = cipher(fieldValue, cipherMode, criteriaEncrypt);
 				if (!childNoCipherField) {
 					noCipherField.set(false);
 				}
@@ -155,13 +162,50 @@ public class CipherUtil {
 		return false;
 	}
 	
-	public static String getEncryptedValue(String str) {
-		return HexUtil.toHexString(AESUtil.encrypt(str.getBytes(), aesSecretKey, iv));
+	public static String getEncryptedValue(String str, boolean criteriaEncrypt) {
+		return getEncryptedValue(str, criteriaEncrypt, 0);
+	}
+	
+	public static String getEncryptedValue(String str, boolean criteriaEncrypt, int fieldLength) {
+		String encryptedValue = HexUtil.toHexString(AESUtil.encrypt(str.getBytes(), aesSecretKey, iv));
+		if (enableFuzzyQuery) {
+			if (criteriaEncrypt) {
+				if (str.length() != fieldLength) {
+					List<String> tokens = SecretFieldTokenizerUtil.simpleTokens(str);
+					//empty query criteria or too short query criteria return origin string.
+					if (tokens == null || tokens.size() == 0) {
+						return str;
+					}
+					List<String> encryptedTokens = new ArrayList<String>();
+					for (String token : tokens) {
+						String encryptToken = HexUtil.toHexString(AESUtil.encrypt(token.getBytes(), aesSecretKey, iv, AESMode.CFB8_NOPADDING));
+						encryptedTokens.add(encryptToken);
+					}
+					encryptedValue = "%" + StringUtils.join(encryptedTokens.toArray()) + "%";
+				} else {
+					encryptedValue = encryptedValue + "%";
+				}
+			} else {
+				List<String> tokens = SecretFieldTokenizerUtil.tokens(str);
+				List<String> encryptedTokens = new ArrayList<String>();
+				for (String token : tokens) {
+					String encryptToken = HexUtil.toHexString(AESUtil.encrypt(token.getBytes(), aesSecretKey, iv, AESMode.CFB8_NOPADDING));
+					encryptedTokens.add(encryptToken);
+				}
+				encryptedValue = String.format("%s$%s$$", encryptedValue, StringUtils.join(encryptedTokens.toArray()));
+			}
+		}
+		return encryptedValue;
 	}
 	
 	public static String getDecryptedValue(String str) {
 		if (isEncryptedValue(str)) {
-			return new String(AESUtil.decrypt(HexUtil.toByteArray(str), aesSecretKey, iv));
+			String encryptedStr = str;
+			if (str.endsWith("$$") && str.charAt(0) != '$') {
+				int endIndex = str.indexOf('$');
+				encryptedStr = str.substring(0, endIndex);
+			}
+			return new String(AESUtil.decrypt(HexUtil.toByteArray(encryptedStr), aesSecretKey, iv));
 		} else {
 			return str;
 		}
@@ -169,7 +213,13 @@ public class CipherUtil {
 	
 	final static Pattern hexPattern = Pattern.compile("^[a-fA-F0-9]+$");
 	private static boolean isEncryptedValue(String str) {
-		if (StringUtils.isEmpty(str) || str.length() % 16 != 0
+		if (StringUtils.isEmpty(str)) {
+			return false;
+		}
+		if (str.endsWith("$$") && str.charAt(0) != '$') {
+			return true;
+		}
+		if (str.length() % 16 != 0
 				|| !hexPattern.matcher(str).find()) {
 			return false;
 		}

@@ -5,7 +5,7 @@
   <parent>
     <groupId>io.github.zakiis</groupId>
     <artifactId>zakiis-parent</artifactId>
-    <version>0.0.3</version>
+    <version>0.0.4</version>
     <relativePath>../parent/pom.xml</relativePath>
   </parent>
   
