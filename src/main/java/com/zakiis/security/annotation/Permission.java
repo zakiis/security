@@ -2,17 +2,18 @@ package com.zakiis.security.annotation;
 
 import java.lang.annotation.Documented;
 import java.lang.annotation.ElementType;
-import java.lang.annotation.Inherited;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.FIELD})
+@Target({ElementType.METHOD})
 @Documented
-@Inherited
-public @interface Cipher {
-
-	/** full length of that field if the length is fixed.*/
-	int length() default 0;
+public @interface Permission {
+	
+	/** roles which can access this method, user only need one of the roles */
+	String[] roles() default {};
+	
+	/** if bypass equals true, this method can be accessed by anyone*/
+	boolean bypass() default false;
 }
