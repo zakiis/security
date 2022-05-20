@@ -61,7 +61,7 @@ public class AESUtil {
 	 * @param keyBytes AES secret key
 	 * @param iv initial vector
 	 * @param aesMode {@link AESMode}
-	 * @return
+	 * @return encrypted bytes
 	 */
 	public static byte[] encrypt(byte[] sourceBytes, byte[] keyBytes, byte[] iv, String aesMode) {
 		if (keyBytes == null || keyBytes.length % 8 != 0) {
@@ -99,11 +99,11 @@ public class AESUtil {
 	
 	/**
 	 * decrypt content using AES algorithm
-	 * @param sourceBytes content need decrypt
+	 * @param encryptedBytes content need decrypt
 	 * @param keyBytes AES secret key
 	 * @param iv initial vector
 	 * @param aesMode {@link AESMode}
-	 * @return
+	 * @return encrypted bytes
 	 */
 	public static byte[] decrypt(byte[] encryptedBytes, byte[] keyBytes, byte[] iv, String aesMode) {
 		if (keyBytes == null || (keyBytes.length != 16 && keyBytes.length != 24 && keyBytes.length != 32)) {

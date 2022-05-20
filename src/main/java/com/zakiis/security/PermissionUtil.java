@@ -11,8 +11,8 @@ public class PermissionUtil {
 
 	/**
 	 * check if current user has privileges to this function
-	 * @param userRoles
-	 * @param permission
+	 * @param userRoles roles that current login user has
+	 * @param permission perssion that current method need
 	 */
 	public static void checkFunctionAccess(List<String> userRoles, Permission permission) {
 		if (permission == null) {

@@ -17,7 +17,19 @@
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
   </properties>
-  
+ 
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>io.github.zakiis</groupId>
+        <artifactId>zakiis-dependencies</artifactId>
+        <version>0.0.4</version>
+        <scope>import</scope>
+        <type>pom</type>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
+
   <dependencies>
     <dependency>
       <groupId>io.github.zakiis</groupId>
